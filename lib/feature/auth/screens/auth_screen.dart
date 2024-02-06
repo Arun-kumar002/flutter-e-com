@@ -1,6 +1,7 @@
 import 'package:e_com/common/widgets/custom_button.dart';
 import 'package:e_com/common/widgets/custom_text_field.dart';
 import 'package:e_com/constant/global_variable.dart';
+import 'package:e_com/feature/auth/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
 enum Auth { signin, signup }
@@ -17,9 +18,26 @@ class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signup;
   final signUpFormKey = GlobalKey<FormState>();
   final signInFormKey = GlobalKey<FormState>();
+  final AuthService authService = AuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+
+  void signUpUser() {
+    authService.signUpUser(
+        context: context,
+        email: _emailController.text,
+        password: _passwordController.text,
+        name: _nameController.text);
+  }
+
+  void signInUser() {
+    authService.signInUser(
+      context: context,
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+  }
 
   @override
   void dispose() {
@@ -88,7 +106,13 @@ class _AuthScreenState extends State<AuthScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    CustomButton(text: "Signup", onTap: () {})
+                    CustomButton(
+                        text: "Signup",
+                        onTap: () {
+                          if (signUpFormKey.currentState!.validate()) {
+                            signUpUser();
+                          }
+                        })
                   ]),
                 ),
               ),
@@ -131,7 +155,13 @@ class _AuthScreenState extends State<AuthScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    CustomButton(text: "Signin", onTap: () {})
+                    CustomButton(
+                        text: "Signin",
+                        onTap: () {
+                          if (signInFormKey.currentState!.validate()) {
+                            signInUser();
+                          }
+                        })
                   ]),
                 ),
               ),
